@@ -27,33 +27,35 @@ const postSignupUser = (req, res) => {
             .json({ message: "You must accept the terms and conditions" });
     }
 
-    User.findOne({ email }).then((existingUser) => {
-        if (existingUser) {
-            return res.status(400).json({ message: "User already exist" });
-        }
-    });
+    User.findOne({ email })
+        .then((existingUser) => {
+            if (existingUser) {
+                return res.status(400).json({ message: "User already exist" });
+            }
 
-    let salt = bcrypt.genSaltSync(10);
-    let hashedPassword = bcrypt.hashSync(password, salt);
+            let salt = bcrypt.genSaltSync(10);
+            let hashedPassword = bcrypt.hashSync(password, salt);
 
-    const newUser = new User({
-        firstName,
-        lastName,
-        email,
-        password: hashedPassword,
-        matricNumber,
-        faculty,
-        department,
-        level,
-        termsAccepted,
-    });
-    newUser
-        .save()
+            const newUser = new User({
+                firstName,
+                lastName,
+                email,
+                password: hashedPassword,
+                matricNumber,
+                faculty,
+                department,
+                level,
+                termsAccepted,
+            });
+
+            return newUser.save();
+        })
         .then((user) => {
+            if (!user) return;
+
             const token = jwt.sign({ id: user._id }, JWT_SECRET, {
                 expiresIn: "1h",
             });
-            // console.log(user);
             res.status(201).json({
                 token,
                 user: {
@@ -63,7 +65,6 @@ const postSignupUser = (req, res) => {
                     department: user.department,
                     faculty: user.faculty,
                     level: user.level,
-                    faculty: user.faculty,
                     profilePicture: user.profilePicture,
                     role: user.role,
                 },

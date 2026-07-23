@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusVote API Documentation</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon"></div>
+                    <h1>CampusVote API</h1>
+                </div>
+                <p class="version">v1.0.0</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Getting Started</h3>
+                    <ul>
+                        <li><a href="#introduction" class="active">Introduction</a></li>
+                        <li><a href="#authentication">Authentication</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Users</h3>
+                    <ul>
+                        <li><a href="#user-signup"><span class="method post">POST</span> Signup</a></li>
+                        <li><a href="#user-login"><span class="method post">POST</span> Login</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Schema Models</h3>
+                    <ul>
+                        <li><a href="#models">Database Models</a></li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <div class="theme-toggle-container">
+                <button id="theme-toggle" class="theme-toggle-btn">
+                    <span id="theme-icon">🌙</span> Dark Mode
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                
+                <!-- Section: Introduction -->
+                <section id="introduction" class="doc-section">
+                    <h2>Introduction</h2>
+                    <p class="lead">Welcome to the CampusVote API documentation. This API powers the voting and election platform, providing robust authentication, election management, and candidate applications.</p>
+                    
+                    <div class="info-card glass-panel">
+                        <div class="card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                            <h3>Base URL</h3>
+                        </div>
+                        <p>All API requests should be prefixed with the following base URL. Replace <code>5000</code> with your configured PORT if running locally.</p>
+                        <div class="code-block">
+                            <code>http://localhost:5000/api</code>
+                            <button class="copy-btn" data-clipboard="http://localhost:5000/api">Copy</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section: Authentication -->
+                <section id="authentication" class="doc-section">
+                    <h2>Authentication</h2>
+                    <p>The CampusVote API uses <strong>JSON Web Tokens (JWT)</strong> for authentication. Upon successful login or registration, you will receive a token in the response.</p>
+                    
+                    <p>For protected routes, you must include this token in the Authorization header of your HTTP request:</p>
+                    <div class="code-block">
+                        <code>Authorization: Bearer &lt;your_jwt_token&gt;</code>
+                        <button class="copy-btn" data-clipboard="Authorization: Bearer <your_jwt_token>">Copy</button>
+                    </div>
+                </section>
+
+                <hr class="divider">
+
+                <!-- Section: User Signup -->
+                <section id="user-signup" class="doc-section endpoint-section">
+                    <div class="endpoint-header">
+                        <span class="badge method-post">POST</span>
+                        <h2>/users/signup</h2>
+                    </div>
+                    <p>Registers a new student user onto the platform. Requires personal details and a unique matriculation number.</p>
+                    
+                    <div class="split-view">
+                        <!-- Request Details -->
+                        <div class="details-pane">
+                            <h3>Request Body</h3>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>firstName</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>User's first name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>lastName</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>User's last name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>email</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>Valid email address (Unique)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>password</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>Minimum 6 characters</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>confirmPassword</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>Must match password</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>matricNumber</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>Student matriculation number (Unique)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>faculty</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>e.g., "Engineering"</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>department</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>e.g., "Computer Science"</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>level</code></td>
+                                        <td>number</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>Enum: 100, 200, 300, 400, 500, 600</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>termsAccepted</code></td>
+                                        <td>boolean</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>Must be true</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Code Examples -->
+                        <div class="code-pane glass-panel">
+                            <div class="tabs">
+                                <button class="tab active">Request</button>
+                                <button class="tab">Response (201)</button>
+                            </div>
+                            <div class="tab-content active" id="req-signup">
+                                <div class="code-block json-block">
+<pre><code>{
+  <span class="json-key">"firstName"</span>: <span class="json-string">"John"</span>,
+  <span class="json-key">"lastName"</span>: <span class="json-string">"Doe"</span>,
+  <span class="json-key">"email"</span>: <span class="json-string">"johndoe@example.com"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"password123"</span>,
+  <span class="json-key">"confirmPassword"</span>: <span class="json-string">"password123"</span>,
+  <span class="json-key">"matricNumber"</span>: <span class="json-string">"12345678"</span>,
+  <span class="json-key">"faculty"</span>: <span class="json-string">"Engineering"</span>,
+  <span class="json-key">"department"</span>: <span class="json-string">"Computer Science"</span>,
+  <span class="json-key">"level"</span>: <span class="json-number">400</span>,
+  <span class="json-key">"termsAccepted"</span>: <span class="json-boolean">true</span>
+}</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-content" id="res-signup" style="display: none;">
+                                <div class="code-block json-block">
+<pre><code>{
+  <span class="json-key">"token"</span>: <span class="json-string">"eyJhbGciOiJIUzI1NiIsIn..."</span>,
+  <span class="json-key">"user"</span>: {
+    <span class="json-key">"email"</span>: <span class="json-string">"johndoe@example.com"</span>,
+    <span class="json-key">"firstName"</span>: <span class="json-string">"John"</span>,
+    <span class="json-key">"lastName"</span>: <span class="json-string">"Doe"</span>,
+    <span class="json-key">"department"</span>: <span class="json-string">"Computer Science"</span>,
+    <span class="json-key">"faculty"</span>: <span class="json-string">"Engineering"</span>,
+    <span class="json-key">"level"</span>: <span class="json-number">400</span>,
+    <span class="json-key">"profilePicture"</span>: <span class="json-null">null</span>,
+    <span class="json-key">"role"</span>: <span class="json-string">"student"</span>
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="divider">
+
+                <!-- Section: User Login -->
+                <section id="user-login" class="doc-section endpoint-section">
+                    <div class="endpoint-header">
+                        <span class="badge method-post">POST</span>
+                        <h2>/users/login</h2>
+                    </div>
+                    <p>Authenticates an existing user and returns an access token. Users can login using either their email or matriculation number.</p>
+                    
+                    <div class="split-view">
+                        <!-- Request Details -->
+                        <div class="details-pane">
+                            <h3>Request Body</h3>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>identifier</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>Email OR Matric Number</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>password</code></td>
+                                        <td>string</td>
+                                        <td><span class="req-badge">Yes</span></td>
+                                        <td>Account password</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Code Examples -->
+                        <div class="code-pane glass-panel">
+                            <div class="tabs">
+                                <button class="tab active">Request</button>
+                                <button class="tab">Response (200)</button>
+                            </div>
+                            <div class="tab-content active">
+                                <div class="code-block json-block">
+<pre><code>{
+  <span class="json-key">"identifier"</span>: <span class="json-string">"johndoe@example.com"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"password123"</span>
+}</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-content" style="display: none;">
+                                <div class="code-block json-block">
+<pre><code>{
+  <span class="json-key">"token"</span>: <span class="json-string">"eyJhbGciOiJIUzI1NiIsIn..."</span>,
+  <span class="json-key">"user"</span>: {
+    <span class="json-key">"email"</span>: <span class="json-string">"johndoe@example.com"</span>,
+    <span class="json-key">"firstName"</span>: <span class="json-string">"John"</span>,
+    <span class="json-key">"lastName"</span>: <span class="json-string">"Doe"</span>,
+    <span class="json-key">"department"</span>: <span class="json-string">"Computer Science"</span>,
+    <span class="json-key">"faculty"</span>: <span class="json-string">"Engineering"</span>,
+    <span class="json-key">"level"</span>: <span class="json-number">400</span>,
+    <span class="json-key">"profilePicture"</span>: <span class="json-null">null</span>,
+    <span class="json-key">"role"</span>: <span class="json-string">"student"</span>
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="divider">
+
+                <!-- Section: Models -->
+                <section id="models" class="doc-section">
+                    <h2>Database Models</h2>
+                    <p>To help you understand the backend's data structure, here are the main entities (schemas) defined in the MongoDB database:</p>
+                    
+                    <div class="models-grid">
+                        <div class="model-card glass-panel">
+                            <div class="model-icon">👤</div>
+                            <h3>User</h3>
+                            <p>Represents users of the system. Roles include <code>student</code> and <code>admin</code>. Stores core identity like matric number, department, level, and authentication details.</p>
+                        </div>
+                        
+                        <div class="model-card glass-panel">
+                            <div class="model-icon">🗳️</div>
+                            <h3>Election</h3>
+                            <p>Represents an election event. Tracks status (<code>upcoming</code>, <code>ongoing</code>, <code>completed</code>), active dates, allowed voters list, and participating candidates.</p>
+                        </div>
+                        
+                        <div class="model-card glass-panel">
+                            <div class="model-icon">🎓</div>
+                            <h3>Candidate</h3>
+                            <p>Represents a user running for a specific position in an election. Contains details like their manifesto, the position they are contesting for, and their vote tally.</p>
+                        </div>
+                        
+                        <div class="model-card glass-panel">
+                            <div class="model-icon">📝</div>
+                            <h3>Contest Application</h3>
+                            <p>Used when a student applies to become a candidate. Tracks application status (<code>pending</code>, <code>approved</code>, <code>rejected</code>), their motivation statement, and the reviewer.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <footer>
+                    <p>CampusVote API Documentation &copy; 2026. Designed for Frontend Developers.</p>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>
